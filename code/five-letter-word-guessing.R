@@ -44,25 +44,25 @@ word_scores$word_length <-  str_length(word_scores$word_name)
 
 # Calculates the initial scores for all words.-----
 # This calculates the score for all words, without worrying about duplicate letts.
-ind2 <- 0
-for (ind2 in 1:num_words){
-  #print(word_scores[[ind2,1]])
-  score_ind2 <- Scoring_Word(word_scores[[ind2, "word_name"]],
-                             freqs = char_frequencies, verbose = TRUE, debug_detail = TRUE)
-  word_scores[[ind2,"score"]] <- score_ind2
-}
+# ind2 <- 0
+# for (ind2 in 1:num_words){
+#   #print(word_scores[[ind2,1]])
+#   score_ind2 <- Scoring_Word(word_scores[[ind2, "word_name"]],
+#                              freqs = char_frequencies, verbose = TRUE, debug_detail = TRUE)
+#   word_scores[[ind2,"score"]] <- score_ind2
+# }
 
+word_scores <- word_scores %>% mutate (score = map_dbl(word_name, Scoring_Word))
 
-ind2 <- 0
-for (ind2 in 1:num_words){
-score_u_ind2 <- Scoring_Word_Unique(word_scores[[ind2,"word_name"]],
-                                    freqs = char_frequencies, verbose = TRUE,  debug_detail = TRUE)
-word_scores[[ind2,"score_guess1"]] <- score_u_ind2
+# ind2 <- 0
+# for (ind2 in 1:num_words){
+# score_u_ind2 <- Scoring_Word_Unique(word_scores[[ind2,"word_name"]],
+#                                     freqs = char_frequencies, verbose = TRUE,  debug_detail = TRUE)
+# word_scores[[ind2,"score_guess1"]] <- score_u_ind2
+# 
+# }
 
-}
-
-
-
+word_scores <- word_scores %>% mutate (score_guess1 = map_dbl(word_name, Scoring_Word_Unique))
 
 
 # Finding the best first word
