@@ -80,28 +80,32 @@ word_1 <- top_words$word_name[1]
 # Word 1= arose -----
 
 
+# 
+# ind3 <- 1
+# for (ind3 in 1:num_words) {
+#   test<- word_scores[[ind3,"word_name"]]
+#   word_scores[[ind3, "word_guess2"]]<- Removing_Letters(test, word_1)
+#   
+#   
+#   
+#   
+#   #print(word_scores[[ind3, "word_guess2"]])
+#   score_ind3 <- Scoring_Word_Unique( word_scores[[ind3, "word_guess2"]],
+#                                      freqs = char_frequencies, verbose = FALSE)
+#   word_scores[[ind3,"score_guess2"]] <- score_ind3
+#   #print (c("output of small list ", top_words[[ind3,4]]))
+# }
+# 
 
-ind3 <- 1
-for (ind3 in 1:num_words) {
-  test<- word_scores[[ind3,"word_name"]]
-  word_scores[[ind3, "word_guess2"]]<- Removing_Letters(test, word_1)
-  
-  
-  
-  
-  #print(word_scores[[ind3, "word_guess2"]])
-  score_ind3 <- Scoring_Word_Unique( word_scores[[ind3, "word_guess2"]],
-                                     freqs = char_frequencies, verbose = FALSE)
-  word_scores[[ind3,"score_guess2"]] <- score_ind3
-  #print (c("output of small list ", top_words[[ind3,4]]))
-}
+word_scores <- word_scores %>% mutate (word_guess2 = map_chr(word_name, Removing_Letters, chosen_word = word_1))
+word_scores <- word_scores %>% mutate (score_guess2 = map_dbl(word_guess2, Scoring_Word_Unique))
 
 top_words <- word_scores %>%
   arrange(desc(score_guess2))
 
 word_2 <- top_words$word_name[1]
 
-# # This is for GUESS 3
+# This is for GUESS 3
 # ind4 <- 1
 # for (ind4 in 1:num_words) {
 # 
@@ -112,13 +116,19 @@ word_2 <- top_words$word_name[1]
 #   word_scores[[ind4,"score_guess3"]] <- score_ind4
 # 
 # }
-# top_words <- word_scores %>%
-#   arrange(desc(score_guess3))
-# 
-# 
-# word_3 <- top_words$word_name[1]
-# 
-# #this is for GUESS 4
+
+
+word_scores <- word_scores %>% mutate (word_guess3 = map_chr(word_guess2, Removing_Letters, chosen_word = word_2))
+word_scores <- word_scores %>% mutate (score_guess3 = map_dbl(word_guess3, Scoring_Word_Unique))
+
+
+top_words <- word_scores %>%
+  arrange(desc(score_guess3))
+
+
+word_3 <- top_words$word_name[1]
+
+#this is for GUESS 4
 # ind4 <- 1
 # for (ind4 in 1:num_words) {
 #   test<- word_scores[[ind4,"word_guess3"]]
@@ -128,17 +138,21 @@ word_2 <- top_words$word_name[1]
 #   word_scores[[ind4,"score_guess4"]] <- score_ind4
 # 
 # }
-# 
-# top_words <- word_scores %>%
-#   arrange(desc(score_guess4))
-# 
-# word_4 <- top_words$word_name[1]
-# 
-# word_scores2 <- word_scores %>%
-#   select(word_name, score_guess1, score_guess2, score_guess3, score_guess4)
-# 
-# 
-# 
+
+word_scores <- word_scores %>% mutate (word_guess4 = map_chr(word_guess3, Removing_Letters, chosen_word = word_3))
+word_scores <- word_scores %>% mutate (score_guess4 = map_dbl(word_guess4, Scoring_Word_Unique))
+
+
+top_words <- word_scores %>%
+  arrange(desc(score_guess4))
+
+word_4 <- top_words$word_name[1]
+
+word_scores2 <- word_scores %>%
+  select(word_name, score_guess1, score_guess2, score_guess3, score_guess4)
+
+
+
 # word_scores_reshaped <- pivot_longer(word_scores2, cols = 2:5, names_to = "score_type", values_to = "score")
 # #levels = c("score_guess1", "score_guess2", "score_guess3")
 # word_scores_reshaped$score_type <- as.factor(word_scores_reshaped$score_type)
