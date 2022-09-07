@@ -8,22 +8,18 @@ char_frequencies <- as.data.frame(table(letters))
 common <- max(char_frequencies[,2])
 y=(char_frequencies[,2]/common)
 char_frequencies$normalized <- y
+return(char_frequencies)
 }
 
-
-
-
 Scoring_Word <- function(word, freqs = char_frequencies, verbose = FALSE, debug_detail = FALSE){
-  #i'm not handling duplicate letters at all right now
   letter_vec <-  unlist(strsplit(word, split = ""))
+    if (verbose == TRUE)
+    {message("I'm in Scoring_words message and scoring: ", word)}
+  
   value <- 0
-  if (verbose == TRUE)
-  {message("I'm in Scoring_words message and scoring: ", word)}
   for (i in 1:length(letter_vec)) {
-    #position <- letter_vec[i]== freqs
-    #value[i] <- y[position]
     position <- letter_vec[i]== freqs$letters
-    value[i] <- freqs$Freq[position]
+    value[i] <- freqs$normalized[position]
     if (debug_detail == TRUE)
     {
       print("I am in the scoring loop calculating value: ")
@@ -32,7 +28,7 @@ Scoring_Word <- function(word, freqs = char_frequencies, verbose = FALSE, debug_
       
     }
     
-    if (length(letter_vec)) {
+    if (i == length(letter_vec)) {
       
       return(total <- sum(value))
     }
@@ -45,6 +41,7 @@ Scoring_Word_Unique <- function(word, freqs = char_frequencies, verbose = FALSE,
   # This does only score on unique letters
   letter_vec <-  unlist(strsplit(word, split = ""))
   unique_letter_vec <- unique(letter_vec)
+  #unique_letter_vec <- letter_vec
   if (verbose == TRUE)
   {message("I'm in Scoring_words_Unique and scoring: ", word)}
   
@@ -53,10 +50,8 @@ Scoring_Word_Unique <- function(word, freqs = char_frequencies, verbose = FALSE,
     return(value)
   } else{
     for (i in 1:length(unique_letter_vec)) {
-      #position <- unique_letter_vec[i] == char_frequencies$letters
-      position <- unique_letter_vec[i] == freqs$letters
-      #value[i] <- y[position]
-      value[i] <- freqs$Freq[position]
+           position <- unique_letter_vec[i] == freqs$letters
+          value[i] <- freqs$normalized[position]
       if (debug_detail == TRUE)
       {
         print("I am in the unique scoring loop calculating value: ")
