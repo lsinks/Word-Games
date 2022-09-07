@@ -43,59 +43,16 @@ word_scores$word_length <-  str_length(word_scores$word_name)
 
 
 # Calculates the initial scores for all words.-----
-# This calculates the score for all words, without worrying about duplicate letts.
-# ind2 <- 0
-# for (ind2 in 1:num_words){
-#   #print(word_scores[[ind2,1]])
-#   score_ind2 <- Scoring_Word(word_scores[[ind2, "word_name"]],
-#                              freqs = char_frequencies, verbose = TRUE, debug_detail = TRUE)
-#   word_scores[[ind2,"score"]] <- score_ind2
-# }
 
 word_scores <- word_scores %>% mutate (score = map_dbl(word_name, Scoring_Word))
-
-# ind2 <- 0
-# for (ind2 in 1:num_words){
-# score_u_ind2 <- Scoring_Word_Unique(word_scores[[ind2,"word_name"]],
-#                                     freqs = char_frequencies, verbose = TRUE,  debug_detail = TRUE)
-# word_scores[[ind2,"score_guess1"]] <- score_u_ind2
-# 
-# }
-
 word_scores <- word_scores %>% mutate (score_guess1 = map_dbl(word_name, Scoring_Word_Unique))
 
 
 # Finding the best first word
 top_words <- word_scores %>%
  arrange(desc(score_guess1))
-
 word_1 <- top_words$word_name[1]
 
-
-
-
-#now we need a function that sees if a word has the letters of the word_1
-#and removes them and then calculates the word score
-# this is finding GUESS 2
-# Word 1= arose -----
-
-
-# 
-# ind3 <- 1
-# for (ind3 in 1:num_words) {
-#   test<- word_scores[[ind3,"word_name"]]
-#   word_scores[[ind3, "word_guess2"]]<- Removing_Letters(test, word_1)
-#   
-#   
-#   
-#   
-#   #print(word_scores[[ind3, "word_guess2"]])
-#   score_ind3 <- Scoring_Word_Unique( word_scores[[ind3, "word_guess2"]],
-#                                      freqs = char_frequencies, verbose = FALSE)
-#   word_scores[[ind3,"score_guess2"]] <- score_ind3
-#   #print (c("output of small list ", top_words[[ind3,4]]))
-# }
-# 
 
 word_scores <- word_scores %>% mutate (word_guess2 = map_chr(word_name, Removing_Letters, chosen_word = word_1))
 word_scores <- word_scores %>% mutate (score_guess2 = map_dbl(word_guess2, Scoring_Word_Unique))
@@ -105,18 +62,6 @@ top_words <- word_scores %>%
 
 word_2 <- top_words$word_name[1]
 
-# This is for GUESS 3
-# ind4 <- 1
-# for (ind4 in 1:num_words) {
-# 
-#   test<- word_scores[[ind4,"word_guess2"]]
-#   word_scores[[ind4,"word_guess3"]] <- Removing_Letters(test, word_2, word_scores[[ind4, "word_length"]] )
-#   #print ( word_scores[[ind4,"word_guess3"]])
-#   score_ind4 <- Scoring_Word_Unique(word_scores[[ind4,"word_guess3"]], freqs = char_frequencies, verbose = FALSE)
-#   word_scores[[ind4,"score_guess3"]] <- score_ind4
-# 
-# }
-
 
 word_scores <- word_scores %>% mutate (word_guess3 = map_chr(word_guess2, Removing_Letters, chosen_word = word_2))
 word_scores <- word_scores %>% mutate (score_guess3 = map_dbl(word_guess3, Scoring_Word_Unique))
@@ -124,20 +69,7 @@ word_scores <- word_scores %>% mutate (score_guess3 = map_dbl(word_guess3, Scori
 
 top_words <- word_scores %>%
   arrange(desc(score_guess3))
-
-
 word_3 <- top_words$word_name[1]
-
-#this is for GUESS 4
-# ind4 <- 1
-# for (ind4 in 1:num_words) {
-#   test<- word_scores[[ind4,"word_guess3"]]
-#   word_scores[[ind4,"word_guess4"]] <- Removing_Letters(test, word_3, word_scores[[ind4, "word_length"]] )
-#  # print ( word_scores[[ind4,"word_guess4"]])
-#   score_ind4 <- Scoring_Word_Unique(word_scores[[ind4,"word_guess4"]], freqs = char_frequencies, verbose = FALSE)
-#   word_scores[[ind4,"score_guess4"]] <- score_ind4
-# 
-# }
 
 word_scores <- word_scores %>% mutate (word_guess4 = map_chr(word_guess3, Removing_Letters, chosen_word = word_3))
 word_scores <- word_scores %>% mutate (score_guess4 = map_dbl(word_guess4, Scoring_Word_Unique))
@@ -148,8 +80,8 @@ top_words <- word_scores %>%
 
 word_4 <- top_words$word_name[1]
 
-word_scores2 <- word_scores %>%
-  select(word_name, score_guess1, score_guess2, score_guess3, score_guess4)
+# word_scores2 <- word_scores %>%
+#   select(word_name, score_guess1, score_guess2, score_guess3, score_guess4)
 
 
 

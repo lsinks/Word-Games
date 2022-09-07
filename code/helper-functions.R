@@ -75,7 +75,7 @@ Removing_Letters <- function (word, chosen_word, verbose = TRUE, debug_detail = 
   #print(num_lett)
   if(num_lett == 0) {return("")} else {if (verbose == TRUE) 
   {
-    message("I'm in Removing_Letters working on ", chosen_word)
+    message("I'm in Removing_Letters working on ", chosen_word, "and ", word)
   }
     ind <- 1
     
