@@ -1,9 +1,11 @@
-profvis({
+
 # Loading libraries and data ----
 #load the tidyverse
 library("tidyverse")
 library("assertive")
+library("profvis")
 
+#profvis({
 word_list <- read.table("input/sgb-words.txt")
 
 #Functions ----
@@ -13,47 +15,6 @@ word_list <- read.table("input/sgb-words.txt")
 source ("code/helper-functions.R")
 
 
-Scoring_Word_Unique <- function(word, freqs, verbose = FALSE){
-  # This does only score on unique letters
-  letter_vec <-  unlist(strsplit(word, split = ""))
-  unique_letter_vec <- unique(letter_vec)
-  if (verbose == TRUE)
-  {message("I'm in Scoring_words_Unique and scoring: ", word)}
-
-  value <- 0
-  if (length(unique_letter_vec)== 0) {
-    return(value)
-  } else{
-      for (i in 1:length(unique_letter_vec)) {
-          position <- unique_letter_vec[i]== char_frequencies$letters
-      value[i] <- y[position]
-    # print(i)
-    # print(value)
-    if (i==length(unique_letter_vec)) {
-      # print("I am here")
-      # print(sum(value))
-      return(total <- sum(value))
-    }
-    
-  }
-  }
-}
-Removing_Letters <- function (word, chosen_word, num_lett) {
-  message("I'm in Removing_Letters")
-  ind <- 1
-  #print(chosen_word)
-  char_vec <- unlist(strsplit(chosen_word, ""))
-  test <- word
-  for (ind in 1:num_lett) {
-  test <- str_replace_all(test, char_vec[ind], "")
-
- #print(char_vec[ind])
-  #print(test)
-
-  }
-  return(test)
-}
-
 # making the frequency table ----
 letters <- unlist(strsplit(word_list[,1], split = ""))
 char_frequencies <- as.data.frame(table(letters))
@@ -62,6 +23,7 @@ char_frequencies <- as.data.frame(table(letters))
 common <- max(char_frequencies[,2])
 y=(char_frequencies[,2]/common)
 
+source("code/data-vis.R")
 
 # Bulk of the code is here ----
 
@@ -91,7 +53,7 @@ ind2 <- 0
 for (ind2 in 1:num_words){
   #print(word_scores[[ind2,1]])
   score_ind2 <- Scoring_Word(word_scores[[ind2, "word_name"]],
-                             freqs = char_frequencies$letters, verbose = FALSE)
+                             freqs = char_frequencies, verbose = TRUE, debug_detail = TRUE)
   word_scores[[ind2,"score"]] <- score_ind2
 }
 
@@ -103,7 +65,7 @@ for (ind2 in 1:num_words){
  # print(score_ind2)
 #  word_scores[[ind2,3]] <- score_ind2
 score_u_ind2 <- Scoring_Word_Unique(word_scores[[ind2,"word_name"]],
-                                    freqs = char_frequencies$letters, verbose = FALSE)
+                                    freqs = char_frequencies, verbose = TRUE,  debug_detail = TRUE)
 word_scores[[ind2,"score_guess1"]] <- score_u_ind2
 
 }
@@ -254,4 +216,4 @@ ggplot(char_frequencies, aes(x= letter_order
   ylab("Normalized Counts") +
   xlab ("Letter") +
   theme_classic()
-})
+#})
