@@ -177,7 +177,7 @@ letter_vec <-  unlist(strsplit(word_2, split = ""))
 print(letter_vec)
 for (i in 1:length(letter_vec)) {
   position <- letter_vec[i]== char_frequencies$letters
-  char_frequencies$guess[position] <- "Guess_2"
+  char_frequencies$guess[position] <- "Guess 2"
 
 }
 
