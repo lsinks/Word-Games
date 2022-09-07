@@ -1,3 +1,18 @@
+Construct_Freq_Table <- function(word_list) {
+# making the frequency table ----
+
+letters <- unlist(strsplit(word_list[,1], split = ""))
+char_frequencies <- as.data.frame(table(letters))
+
+#normalized
+common <- max(char_frequencies[,2])
+y=(char_frequencies[,2]/common)
+char_frequencies$normalized <- y
+}
+
+
+
+
 Scoring_Word <- function(word, freqs = char_frequencies, verbose = FALSE, debug_detail = FALSE){
   #i'm not handling duplicate letters at all right now
   letter_vec <-  unlist(strsplit(word, split = ""))

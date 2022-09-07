@@ -22,6 +22,7 @@ char_frequencies <- as.data.frame(table(letters))
 #normalized
 common <- max(char_frequencies[,2])
 y=(char_frequencies[,2]/common)
+char_frequencies$normalized <- y
 
 source("code/data-vis.R")
 
