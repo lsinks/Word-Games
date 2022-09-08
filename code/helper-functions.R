@@ -69,25 +69,6 @@ Scoring_Word_Unique <- function(word, freqs = char_frequencies, verbose = FALSE,
 }
 
 Removing_Letters <- function (word, chosen_word, verbose = TRUE, debug_detail = TRUE) {
-#Removing_Letters <- function (parent_word, word, chosen_word, verbose = TRUE, debug_detail = TRUE) {
-  num_lett <- str_length(word)
-  #print(original_word)
-  #print(num_lett)
-  if(num_lett == 0) {return("")} else {if (verbose == TRUE) 
-  {
-    message("I'm in Removing_Letters working on ", chosen_word, "and ", word)
-  }
-    ind <- 1
-    
-    char_vec <- unlist(strsplit(chosen_word, ""))
-    test <- word
-    for (ind in 1:num_lett) {
-      test <- str_replace_all(test, char_vec[ind], "")
-      if (debug_detail == TRUE)
-      {print(char_vec[ind])
-        print(test)}
-      
-    }
-    return(test)}
-  
-}
+  lvec <- gsub(paste0("[", chosen_word, "]"), "", word)  
+  return(lvec)}
+ 
