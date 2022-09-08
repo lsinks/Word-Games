@@ -5,7 +5,7 @@ library("tidyverse")
 library("assertive")
 library("profvis")
 
-#profvis({
+
 word_list <- read.table("input/sgb-words.txt")
 
 #Functions ----
