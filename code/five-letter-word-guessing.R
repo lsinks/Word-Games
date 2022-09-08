@@ -5,8 +5,8 @@ library("tidyverse")
 library("assertive")
 library("profvis")
 
-#profvis({
-word_list <- read.table("input/sgb-words.txt")
+
+word_list <- read.table("input/sgb-words.txt") #is this a factor??ge
 
 #Functions ----
 #scoring code uses the counting code from
@@ -43,11 +43,12 @@ word_scores$word_length <-  str_length(word_scores$word_name)
 
 # Calculates the initial scores for all words.-----
 
-word_scores <- word_scores %>% mutate (score = map_dbl(word_name, Scoring_Word))
-word_scores <- word_scores %>% mutate (score_guess1 = map_dbl(word_name, Scoring_Word_Unique))
+word_scores <- word_scores %>% mutate(score = map_dbl(word_name, Scoring_Word))
+word_scores <- word_scores %>% mutate(score_guess1 = map_dbl(word_name, Scoring_Word_Unique))
 
 
 # Finding the best first word
+
 top_words <- word_scores %>%
  arrange(desc(score_guess1))
 word_1 <- top_words$word_name[1]
@@ -70,8 +71,8 @@ top_words <- word_scores %>%
   arrange(desc(score_guess3))
 word_3 <- top_words$word_name[1]
 
-word_scores <- word_scores %>% mutate (word_guess4 = map_chr(word_guess3, Removing_Letters, chosen_word = word_3))
-word_scores <- word_scores %>% mutate (score_guess4 = map_dbl(word_guess4, Scoring_Word_Unique))
+word_scores <- word_scores %>% mutate(word_guess4 = map_chr(word_guess3, Removing_Letters, chosen_word = word_3))
+word_scores <- word_scores %>% mutate(score_guess4 = map_dbl(word_guess4, Scoring_Word_Unique))
 
 
 top_words <- word_scores %>%
@@ -93,6 +94,9 @@ word_scores2 <- word_scores %>%
 #plotting the frequency of the letters in our word_set
 ggplot(char_frequencies, aes(x =fct_rev(fct_reorder(letters,  normalized)), y= normalized )) +
   geom_col() +
+#ggplot(char_frequencies, aes(x = fct_rev(fct_reorder(letters,  normalized)), y=stat(prop)  )) +
+ # geom_bar() +
+
   theme_classic() +
   theme(legend.position = "none") +
   labs(title = "Frequencies of Letters", caption = "from 5 letter words") +
@@ -161,7 +165,6 @@ for (i in 1:length(letter_vec)) {
   char_frequencies$guess[position] <- "Guess 1"
 
 }
-
 
 
 
