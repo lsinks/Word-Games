@@ -18,7 +18,6 @@ source ("code/helper-functions.R")
 
 char_frequencies <- Construct_Freq_Table(word_list)
 
-#source("code/data-vis.R")
 
 # Bulk of the code is here ----
 
@@ -80,83 +79,104 @@ top_words <- word_scores %>%
 
 word_4 <- top_words$word_name[1]
 
-# word_scores2 <- word_scores %>%
-#   select(word_name, score_guess1, score_guess2, score_guess3, score_guess4)
+word_scores2 <- word_scores %>%
+   select(word_name, score_guess1, score_guess2, score_guess3, score_guess4)
+
+### This is now just visualizing what we've done.
+
+#source("code/Data-Vis.R")  #this doesn't work.  
+
+# I just copied them here for now
 
 
 
-# word_scores_reshaped <- pivot_longer(word_scores2, cols = 2:5, names_to = "score_type", values_to = "score")
-# #levels = c("score_guess1", "score_guess2", "score_guess3")
-# word_scores_reshaped$score_type <- as.factor(word_scores_reshaped$score_type)
-# 
-# ggplot(word_scores_reshaped, aes(score, fill = score_type))+
-#   geom_density(alpha= 0.5) +
-#   theme_classic()
-# 
-# #word_scores_reshaped <- factor(score_type, ordered = TRUE)
-# # working on letter frequencies graph -----
-# 
-# #ggplot(test_letters, aes(x= fct_reorder(test_letters[,1], test_letters[,2])
-# #                         +                              , y, fill= lett_fect)) + geom_col()
-# 
-# guess <- rep("not guessed", times = 26)
-# 
-# char_frequencies <- cbind(char_frequencies, guess)
-# 
-# 
-# 
-# 
-# 
-# 
-# letter_vec <-  unlist(strsplit(word_4, split = ""))
-# print(letter_vec)
-# for (i in 1:length(letter_vec)) {
-#   position <- letter_vec[i]== char_frequencies$letters
-#   char_frequencies$guess[position] <- "Guess 4"
-# 
-# }
-# 
-# letter_vec <-  unlist(strsplit(word_3, split = ""))
-# print(letter_vec)
-# for (i in 1:length(letter_vec)) {
-#   position <- letter_vec[i]== char_frequencies$letters
-# 
-#   char_frequencies$guess[position] <- "Guess 3"
-# 
-# }
-# 
-# letter_vec <-  unlist(strsplit(word_2, split = ""))
-# print(letter_vec)
-# for (i in 1:length(letter_vec)) {
-#   position <- letter_vec[i]== char_frequencies$letters
-#   char_frequencies$guess[position] <- "Guess 2"
-# 
-# }
-# 
-# 
-# letter_vec <-  unlist(strsplit(word_1, split = ""))
-# print(letter_vec)
-# for (i in 1:length(letter_vec)) {
-#   position <- letter_vec[i]== char_frequencies$letters
-#   char_frequencies$guess[position] <- "Guess 1"
-# 
-# }
-# 
-# ggplot(char_frequencies, aes(x= fct_reorder(char_frequencies[,1], char_frequencies[,2])
-#                              , normalized , fill = char_frequencies[,3])) +
-#   geom_col()+
-#   theme_classic()
-# 
-# 
-# 
-# 
-# letter_order <- fct_reorder(char_frequencies[,1], char_frequencies[,2])
-# letter_order <- fct_rev(letter_order)
-# ggplot(char_frequencies, aes(x= letter_order
-#                              , normalized , fill = guess)) +
-#   geom_col()+
-#   ggtitle("When Letters are Guessed") +
-#   ylab("Normalized Counts") +
-#   xlab ("Letter") +
-#   theme_classic()
-# #})
+#plotting the frequency of the letters in our word_set
+ggplot(char_frequencies, aes(x =fct_rev(fct_reorder(letters,  normalized)), y= normalized )) +
+  geom_col() +
+  theme_classic() +
+  theme(legend.position = "none") +
+  labs(title = "Frequencies of Letters", caption = "from 5 letter words") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  xlab("Letter") +
+  ylab("Frequency") +
+  
+  scale_y_continuous( expand = c(0, 0))
+
+## This looks at the distribution of scores as guessing occurs.  Initially, you have a
+
+word_scores_reshaped <- pivot_longer(word_scores2, cols = 2:5, names_to = "score_type", values_to = "score")
+
+word_scores_reshaped$score_type <- as.factor(word_scores_reshaped$score_type)
+
+ggplot(word_scores_reshaped, aes(score, fill = score_type))+
+  geom_density(alpha= 0.5) +
+  theme_classic()+
+  labs(title = "Evolution of Word Scores as Guessing Progresses", caption = "for 5 letter words") +
+  #theme(plot.title = element_text(hjust = 0.5)) +
+  xlab("Score") +
+  ylab("Density") +
+  labs(fill = "") +
+  theme(legend.position = c(0.7, 0.8)) +
+  scale_x_continuous( expand = c(0, 0)) +
+  scale_y_continuous( expand = c(0, 0)) 
+
+
+
+## Now we are visualizing what letters are picked in each guess
+
+guess <- rep("not guessed", times = 26)
+char_frequencies <- cbind(char_frequencies, guess)
+# this is done in reverse order because some letters are guessed in more than
+# one word and I'd like them marked at the earliest guess.
+letter_vec <-  unlist(strsplit(word_4, split = ""))
+print(letter_vec)
+for (i in 1:length(letter_vec)) {
+  position <- letter_vec[i]== char_frequencies$letters
+  char_frequencies$guess[position] <- "Guess 4"
+
+}
+
+letter_vec <-  unlist(strsplit(word_3, split = ""))
+print(letter_vec)
+for (i in 1:length(letter_vec)) {
+  position <- letter_vec[i]== char_frequencies$letters
+
+  char_frequencies$guess[position] <- "Guess 3"
+
+}
+
+letter_vec <-  unlist(strsplit(word_2, split = ""))
+print(letter_vec)
+for (i in 1:length(letter_vec)) {
+  position <- letter_vec[i]== char_frequencies$letters
+  char_frequencies$guess[position] <- "Guess 2"
+
+}
+
+
+letter_vec <-  unlist(strsplit(word_1, split = ""))
+print(letter_vec)
+for (i in 1:length(letter_vec)) {
+  position <- letter_vec[i]== char_frequencies$letters
+  char_frequencies$guess[position] <- "Guess 1"
+
+}
+
+
+
+
+
+ggplot(char_frequencies, aes(
+  x = fct_rev(fct_reorder(letters,  normalized)),
+  y = normalized,
+  fill = guess
+)) +
+  geom_col() +
+  ggtitle("When Letters are Guessed") +
+  ylab("Normalized Counts") +
+  xlab ("Letter") +
+  theme_classic() +
+  theme(legend.position = c(0.7, 0.8)) +
+  scale_y_continuous(expand = c(0, 0))
+
+
