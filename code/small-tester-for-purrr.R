@@ -80,10 +80,35 @@ word_scores$word_length <-  str_length(word_scores$word_name)
 # #word_scores <- word_scores %>% mutate (score = map_dbl(temp_list$word1, Scoring_Word_purr)) this works
 # word_scores <- word_scores %>% mutate (score = map_dbl(word_name, Scoring_Word_purr))
 
+Removing_Letters_purrr <- function (parent_word, word, chosen_word, verbose = TRUE, debug_detail = TRUE) {
+  #Removing_Letters <- function (parent_word, word, chosen_word, verbose = TRUE, debug_detail = TRUE) {
+  num_lett <- str_length(word)
+  #print(original_word)
+  #print(num_lett)
+  if(num_lett == 0) {return("")} else {if (verbose == TRUE) 
+  {
+    message("I'm in Removing_Letters working on ", word, "and ", chosen_word)
+  }
+    ind <- 1
+    
+    char_vec <- unlist(strsplit(chosen_word, ""))
+    test <- word
+    for (ind in 1:num_lett) {
+      test <- str_replace_all(test, char_vec[ind], "")
+      if (debug_detail == TRUE)
+      {print(char_vec[ind])
+        print(test)}
+      
+    }
+    return(test)}
+  
+}
+
+
 word_1<- "arose"
 #test<- word_scores[[2,"word_name"]]
 #word_scores[[2, "word_guess2"]]<- Removing_Letters(test, word_1)
-word_scores <- word_scores %>% mutate (word_guess2 = map_chr(word_name, Removing_Letters, chosen_word = word_1))
+word_scores <- word_scores %>% mutate (word_guess2 = map2_chr(word_name, word_name,  Removing_Letters_purrr, chosen_word = word_1))
 
 word_2 <- "until"
 #word_scores <- word_scores %>% mutate (word_guess3 = map2_chr(word_name, word_guess2, Removing_Letters, chosen_word = word_2))
@@ -91,10 +116,10 @@ word_2 <- "until"
 #It isn't doing the correct thing, but it runs without error.
 
 
-word_scores <- word_scores %>% mutate (word_guess3 = map_chr(word_guess2, Removing_Letters, chosen_word = word_2))
+word_scores <- word_scores %>% mutate (word_guess3 = map2_chr(word_name, word_guess2, Removing_Letters_purrr, chosen_word = word_2))
 
-word_3 <- "dumpy"
-word_scores <- word_scores %>% mutate (word_guess4 = map_chr(word_guess3, Removing_Letters, chosen_word = word_3))
+# word_3 <- "dumpy"
+# word_scores <- word_scores %>% mutate (word_guess4 = map2_chr(word_guess3, Removing_Letters, chosen_word = word_3))
 
  #word_scores_temp <- word_scores %>%
  #mutate( purr_scores = map_dbl(word_name, Scoring_Word_purr, freqs = char_frequencies, verbose = TRUE, debug_detail = TRUE))
