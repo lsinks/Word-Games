@@ -3,17 +3,13 @@
 #load the tidyverse
 library("tidyverse")
 library("assertive")
-library("profvis")
+#library("profvis")
 
-
-word_list <- read.table("input/sgb-words.txt") #is this a factor??ge
+#from https://www-cs-faculty.stanford.edu/~knuth/sgb-words.txt
+word_list <- read.table("input/sgb-words.txt") 
 
 #Functions ----
-#scoring code uses the counting code from
-#https://www.r-bloggers.com/2018/12/rrrrs-in-r-letter-frequency-in-r-package-names/
-
-source ("code/helper-functions.R")
-
+source("code/helper-functions.R")
 
 
 char_frequencies <- Construct_Freq_Table(word_list)
@@ -134,6 +130,7 @@ char_frequencies <- cbind(char_frequencies, guess)
 # one word and I'd like them marked at the earliest guess.
 letter_vec <-  unlist(strsplit(word_4, split = ""))
 print(letter_vec)
+
 for (i in 1:length(letter_vec)) {
   position <- letter_vec[i]== char_frequencies$letters
   char_frequencies$guess[position] <- "Guess 4"
@@ -167,13 +164,10 @@ for (i in 1:length(letter_vec)) {
 }
 
 
-
-
 ggplot(char_frequencies, aes(
   x = fct_rev(fct_reorder(letters,  normalized)),
   y = normalized,
-  fill = guess
-)) +
+  fill = guess)) +
   geom_col() +
   ggtitle("When Letters are Guessed") +
   ylab("Normalized Counts") +

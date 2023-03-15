@@ -1,4 +1,8 @@
 Construct_Freq_Table <- function(word_list) {
+
+#scoring code uses the counting code from
+
+#https://www.r-bloggers.com/2018/12/rrrrs-in-r-letter-frequency-in-r-package-names/  
 # making the frequency table ----
 
 letters <- unlist(strsplit(word_list[,1], split = ""))
