@@ -27,14 +27,25 @@ Pull out the minimum viable product from your brainstorming. What is the smalles
 ## 3. Write some bad code. 
 Write some code that does that thing. It will be ugly. If you can't figure something out, do it the wrong way. Just get something running.
 
-## The Minimal Viable Product: Running Code
+### The Minimal Viable Product: Running Code
 
 I cleaned up the commenting/formatting of the initial code just for this post. I also added library(tidyverse)- apparantly I was just loading libraries through the gui back then. If you want to see the true initial, it is on GitHub at: 
 
 Here's what my MVP does:
+1. I found a list of words from: https://www-cs-faculty.stanford.edu/~knuth/sgb-words.txt
+and imported it.
+
+2. I calculated how many times each letter occured over the word list. (This, or rather the scaled version, was the score assigned each letter.)
+3. I looped through the word list and calculated two scores for each word; one using all letters and one using only the unique letters.
+4. I picked the highest scoring word as my first guess.
+5.  I then went through the word list and calculated a second score for the words minus the letters already guess in the first guess (and ignoring duplicated letters)
+6.  I picked the highest scoring word as my second guess.
+7. I repeated steps 5 & 6 to pick a third guess.
+
+Okay, so let's look at some bad code.  I'm going to flag a few things as we go through, but I'm certain you can find a lot more that is not optimal.
 
 
-Here's loading the data and writing two functions.  One
+Here's loading the data and writing two scoring functions.  I have lots of print statements commented out; this is a very simple was to debug and see how you are proceding through the code.  There are more sophisicated tools in R Studio, but I didn't want to figure out how to use them at this moment.  I use the global variable char_frequencies for the value of each letter.  I create this variable in the next code chunk.
 
 ```{r}
 library(tidyverse)
@@ -93,11 +104,180 @@ Scoring_Word_Unique <- function(word){
 
 ```
 
-You can add options to executable code like this
+Here I start a timer to get an idea how long the code took.  I also calculate how often each letter appears in the list and create the normalized version.  I create two incredibley ugly graphs: one of the raw counts for each letter and one of the scaled frequencies.  But I did figure out how to create the graphs in a sorted order.  This is also a moment to do a quick reality check on the results- are the most and least common letters what you'd expect?
 
 ```{r}
-#| echo: false
-2 * 2
+start_time <- Sys.time()
+
+letters <- unlist(strsplit(sgb.words[,1], split = ""))
+char_frequencies <- as.data.frame(table(letters))
+#char_frequencies
+
+ggplot(char_frequencies, 
+        aes(x = fct_reorder(char_frequencies[,1], char_frequencies[,2])
+                              , char_frequencies[,2] )) +
+   geom_col() +
+   theme_classic()
+
+common <- max(char_frequencies[,2])
+y = (char_frequencies[,2]/common)
+
+ggplot(char_frequencies, 
+       aes(x =  fct_reorder(char_frequencies[,1], char_frequencies[,2]), y )) +
+  geom_col()+
+  theme_classic()
 ```
 
-The `echo: false` option disables the printing of code (only output is displayed).
+Now I calculate the scores for the words that I've been currently playing with.  I also hand calculated these scores using the values from char_frequencies to make sure my scoring functions were doing what I thought they were.
+
+I inistalized an object to store the words, scores, and guesses.  You can also tell that I had no idea what data types my objects are, since I called it a list.  It is actually a matrix/array of characters and none of my zeros are actually numbers.  I really want a dataframe, but I didn't really know how to do that.
+
+This chunk also pulls out a single word and sends it to score, just to check that works before I loop through the entire object and calculate all the scores.
+
+You can also see I hard coded in the number of words.
+
+```{r}
+#calculate the score for crone
+crone_score <- Scoring_Word("crone")
+#might_score <- Scoring_Word ("might")
+#sadly_score <- Scoring_Word ("sadly")
+num_words <- 5756
+#num_words <- 5
+small_list <- cbind(word_name = sgb.words[1:num_words,1], 
+                    score =rep(0, times = num_words), 
+                    unique_score = rep(0, times=num_words),
+                    post_word_one_unique = rep(0, times=num_words),
+                    post_word_two_unique = rep(0, times=num_words),
+                    post_word_three_unique = rep(0, times=num_words)
+                                                )
+word <- small_list[[1,1]]
+Scoring_Word(word)
+ind2 <- 0
+
+for (ind2 in 1:num_words){
+  #print(small_list[[ind2,1]])
+  score_ind2 <- Scoring_Word(small_list[[ind2,1]])
+  small_list[[ind2,2]] <- score_ind2
+}
+
+#u_crone_score <- Scoring_Word_Unique("crone")
+#u_there_core <- Scoring_Word_Unique ("there")
+#sadly_score <- Scoring_Word ("sadly")
+
+
+
+
+ind2 <- 0
+for (ind2 in 1:num_words){
+ # print(small_list[[ind2,1]])
+  score_ind2 <- Scoring_Word_Unique(small_list[[ind2,1]])
+ # print(score_ind2)
+  small_list[[ind2,3]] <- score_ind2
+}
+```
+Figured out how to make this into a dataframe.  Note that all my numbers are still characters.  It is kind of funny that things worked even though they were the wrond type.
+
+```{r}
+small_list1 <- small_list
+small_df<- as.data.frame(small_list1)
+top_words <- small_df %>%
+ arrange(desc(unique_score))
+
+word_1 <- top_words$word_name[1]
+```
+
+Now I calculate the second and third guesses.  I wanted to penalize duplicate letters, so I used the unique letter scoring function, and I removed the letters from the first guess.  Couldn't figure out how to do that automatically, so I hard coded in to remove the letters "a", "r", "o", "s", and "e" from the words before I sent them to be scored.  Loop through the list again, and repeat for the last guess.  Again, hard coded in the letters to remove from the first and second guesses.
+
+```{r}
+#now we need a function that sees if a word has the letters of the word_1
+#and removes them and then calculates the word score
+#top word is arose
+# Word 1= arose -----
+ind3 <- 1
+for (ind3 in 1:num_words) {
+ # print(top_words$word_name[ind3])
+  test<- small_list[[ind3,1]]
+  lvec <- gsub("[a r o s e]", "", test)  #this actually works.  How do I use the string?
+  #lvec <-  unlist(strsplit(word_1, split = ""))
+  #lvec<- "t|h|e|i|r" #how do I contruct this automatically
+
+  #new_let <- str_remove_all(pattern= lvec, string= test)
+ # print(lvec)
+  score_ind3 <- Scoring_Word_Unique(lvec)
+ # print("writing score")
+ # print(c(ind3, " ", score_ind3, "for the word ", test, "sent as ", lvec))
+  
+  small_list[[ind3,4]] <- score_ind3
+  #print (c("output of small list ", top_words[[ind3,4]]))
+}
+
+small_df2 <- as.data.frame(small_list)
+top_words2 <- small_df2 %>%
+  arrange(desc(post_word_one_unique))
+
+
+word_2 <- top_words2$word_name[1]
+
+# top word 2 is until
+
+ind4 <- 1
+for (ind4 in 1:num_words) {
+  # print(top_words$word_name[ind3])
+  test<- small_list[[ind4,1]]
+  lvec <- gsub("[u n t i l a r o s e]", "", test)  #this actually works.  How do I use the string?
+  #lvec <-  unlist(strsplit(word_1, split = ""))
+  #lvec<- "t|h|e|i|r" #how do I contruct this automatically
+  
+  #new_let <- str_remove_all(pattern= lvec, string= test)
+  # print(lvec)
+  score_ind4 <- Scoring_Word_Unique(lvec)
+  # print("writing score")
+  # print(c(ind3, " ", score_ind3, "for the word ", test, "sent as ", lvec))
+  
+  end_time <- Sys.time()
+  end_time - start_time
+  
+  small_list[[ind4,5]] <- score_ind4
+  #print (c("output of small list ", top_words[[ind3,4]]))
+}
+
+small_df3<- as.data.frame(small_list)
+top_words2 <- small_df3 %>%
+  arrange(desc(post_word_two_unique))
+
+
+word_3 <- top_words2$word_name[1]
+
+```
+Lastly, I calculated the total score of these 3 words, compared to the words I was currently guessing.  
+
+
+```{r}
+a = Scoring_Word_Unique("arose") + Scoring_Word_Unique("until") + Scoring_Word_Unique("dumpy")
+a
+b = Scoring_Word_Unique("crone") + Scoring_Word_Unique("mighty") + Scoring_Word_Unique("sadly")
+b
+```
+Note that there is an error here too.  Despite the penalty for duplicate letters, "u" appears in two words.  The correct scoring call should have been :
+```{r}
+c = Scoring_Word_Unique("aroseuntildumpy")
+c
+```
+But, the program works!  It generated three reasonable guesses for Wordle that use common letters.  Note that by my scoring rules, the manually chose set of words is a better choice.
+
+## 4. Critique the code
+
+After this first attempt, I came up with a list of tasks.
+
+1.Save current code as frequency_072222 and work on a new copy.  This was functional code last night so I want to keep it.
+2. Import is wrong because it takes the first word as a header.
+3. I need more concise varaible names.  Also, I create a bunch of temp variables that aren't needed.
+4. I manually subtract out (hard coded) words picked in previous cycles.  I need that done on the fly.
+Once 4 is done, I'd like to write a function that will generate however many guesses you ask for.
+6. I'd like to look at the histogram of the scores as you cycle through the guesses.
+7. I'm very unclear on when I need lists, dataframes, tibbles, etc. for the different functions.
+8. Give credit to the website when I took the string split code from.
+9. Some functions from the other code are out of date, so I should update.
+10. Update scoring word to have flexible word length.
+
+Again, there is a lot more wrong with this code, but this is the list of things I could identify with the knowledge I had at the time.
