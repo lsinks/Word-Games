@@ -4,15 +4,93 @@ format: html
 editor: visual
 ---
 
-## My first project: Wordle Guess Generator
+## Self-Guided Learning: The Ever Evolving Wordle Guess Generator
+
+I'm going to show you how I used a portfolio project to create my own learning plan. I honestly did a bunch of this work in a paper notebook. I hadn't learned git at that point and I also find brainstorming with pen and paper more productive than doing it on the computer. I'm a scientist by training, so set this up like I would any experiment- with a fully proper lab notebook.
+
+My learning project was a Wordle Guess Generator. Motivated partly by my desire to have good guesses for Septle (a seven letter guessing game), this project has been a key part of my journey to learn R. The code as gone through several major overhauls as I've needed to learn new things and used this project as the test bed. And here it is again, as vehicle to learn quarto/ markdown. I'm going to show you the very first ugly code and then how I critiqued and revised it over the course of several months.
+
+## 1. Brainstorming the project.
+
+Brainstorm what you want this project to do. Try to have a very clear statement about what the goal of the project is at the top. If you can think of self-contained modules, mark that. If you can sketch out the scaffold of the code- great! If you have some ideas about what the results will be, even better. Put everything you can think of down.
+
+![The initial brainstorming session](images/brainstorming_both.jpg){fig-alt="Two handwritten pages entitled \"Programming Project 1\"" fig-align="center"}
+
+"I want 3 intiial gueses for septle. Ideally, I'll maximize the number of unique letters and I want to preferentially pick from the most frquently used letters.
+
+## 2. Minimum Viable Product: What is the smallest program that works?
+
+Pull out the minimum viable product from your brainstorming. What is the smallest result that would satisfy your goals? Is there a way to make things a bit smaller? I would size it so that you can get working code to accomplish the goal written in a few hours.
 
 
-## Running Code
 
-When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+## 3. Write some bad code. 
+Write some code that does that thing. It will be ugly. If you can't figure something out, do it the wrong way. Just get something running.
+
+## The Minimal Viable Product: Running Code
+
+I cleaned up the commenting/formatting of the initial code just for this post. I also added library(tidyverse)- apparantly I was just loading libraries through the gui back then. If you want to see the true initial, it is on GitHub at: 
+
+Here's what my MVP does:
+
+
+Here's loading the data and writing two functions.  One
 
 ```{r}
-1 + 1
+library(tidyverse)
+
+sgb.words <- 
+  read.delim("C:/Users/drsin/OneDrive/Documents/R Projects/wordle/sgb-words.txt",
+             sep = "")
+
+#probably want this instead because it assumes no headers
+#test6 <- read.table(file.choose())
+
+Scoring_Word <- function(word){
+  #i'm not handling duplicate letters at all right now
+  letter_vec <-  unlist(strsplit(word, split = ""))
+  value <- 0
+  for (i in 1:5) {
+    position <- letter_vec[i] == char_frequencies$letters
+    value[i] <- y[position]
+   # print(i)
+    if (i == 5) {
+     # print("I am here")
+     # print(sum(value))
+      return(total <- sum(value))
+      }
+    
+  }
+} 
+
+
+Scoring_Word_Unique <- function(word){
+
+ # print(word)
+  letter_vec <-  unlist(strsplit(word, split = ""))
+  unique_letter_vec <- unique(letter_vec)
+  #print(unique_letter_vec)
+  #print(length(unique_letter_vec))
+  
+  value <- 0
+  if (length(unique_letter_vec) == 0) {
+    return(value)
+  } else{
+      for (i in 1:length(unique_letter_vec)) {
+      position <- unique_letter_vec[i] == char_frequencies$letters
+      value[i] <- y[position]
+    # print(i)
+    # print(value)
+    if (i == length(unique_letter_vec)) {
+      # print("I am here")
+      # print(sum(value))
+      return(total <- sum(value))
+    }
+    
+  }
+  }
+}
+
 ```
 
 You can add options to executable code like this
