@@ -6,48 +6,83 @@ editor: visual
 
 ## Self-Guided Learning: The Ever Evolving Wordle Guess Generator
 
-I'm going to show you how I used a portfolio project to create my own learning plan. I honestly did a bunch of this work in a paper notebook. I hadn't learned git at that point and I also find brainstorming with pen and paper more productive than doing it on the computer. I'm a scientist by training, so set this up like I would any experiment- with a fully proper lab notebook.
+Text Chunk 1 - rev a
 
-My learning project was a Wordle Guess Generator. Motivated partly by my desire to have good guesses for Septle (a seven letter guessing game), this project has been a key part of my journey to learn R. The code as gone through several major overhauls as I've needed to learn new things and used this project as the test bed. And here it is again, as vehicle to learn quarto/ markdown. I'm going to show you the very first ugly code and then how I critiqued and revised it over the course of several months.
+I will show you how I used a portfolio project to create a self-guided learning plan. My learning project was a Wordle Guess Generator. Motivated partly by my desire to have good guesses for Septle (a seven-letter guessing game), this project has been a crucial part of my journey to learn R.  Practicing and learning coding skills were more important to me than devising the optimal strategy; if you are interested in "the best" Wordle strategy, then you will probably find much better answers by Googling.
+
+For those who don't know, Wordle is a word-guessing gamer that gives you five guesses to identify a 5-letter word. Correct letters are shown in green or yellow with each guess, depending on whether they are appropriately placed or not. Incorrect letters are shown in gray.
+
+I wasn't interested in coming up with the global "best" answer. I wanted to come up with some guesses that fit my gameplay style. I guess three words in a row without trying to solve the game. Then, with a fair number of letters known, I attempt to solve the word.  
+
+The code has undergone several significant overhauls as I've needed to learn new things and used this project as the test bed. And here it is again, as a vehicle to learn quarto/ markdown. Here I will show you the very first ugly code and how I critiqued and revised it over several months.
 
 ## 1. Brainstorming the project.
 
-Brainstorm what you want this project to do. Try to have a very clear statement about what the goal of the project is at the top. If you can think of self-contained modules, mark that. If you can sketch out the scaffold of the code- great! If you have some ideas about what the results will be, even better. Put everything you can think of down.
+Text Chunk 2- Rev A
+Brainstorm what you want this project to do. Try to have a very clear statement about the project's goal at the top. If you can think of self-contained modules, mark that. If you can sketch out the scaffold of the code- great! If you have some ideas about the results, even better. Put everything you can think of down. I had been thinking about this project for a while, so this brainstorming sheet is neat. Neatness and organization are not important at this point; getting stuff written down is.
+
+My goal was "I want 3 initial guesses for Septle. Ideally, I'll maximize the number of unique letters, and I want to preferentially pick from the most frequently used letters."
+
+I decided my scoring would be based on the frequency letters occur in English; more common letters get a higher score than uncommon letters. To generate the score for the word, I proposed the following process:
+
+(1) Read in letter frequencies
+(2) Scoring [the letters, originally I thought it would be based on rank, with the most common letter getting a 26 and the least common getting a 1. That is what the confusing little sketch is attempting to convey. A is not the most common letter, nor is Z the least common.]
+(3)  Read in the list of words
+(4) Calculate the scores [of the words]
+(5) Pick the best word as a first guess [best meaning highest scoring] 
+
+I also talk about how the frequency distribution of letters will likely differ between five and seven-letter words. I suggested looking at the frequency of letters in modern text instead of just frequency lists from linguists. I noted that certain letters are more likely to be in a specific position, and it could be valuable to constrain the guess to typical positions. An example is that "y" is almost always at the end of a word in English, so "sadly" might be a better guess than "yacht" for that reason. You are likelier to lock down a letter with a positionally accurate guess. I also said that I wanted a 4th Wordle guess. There are a lot of ideas here! That's okay because I winnow them down in the next step.
 
 ![The initial brainstorming session](images/brainstorming_both.jpg){fig-alt="Two handwritten pages entitled \"Programming Project 1\"" fig-align="center"}
 
-"I want 3 intiial gueses for septle. Ideally, I'll maximize the number of unique letters and I want to preferentially pick from the most frquently used letters.
 
 ## 2. Minimum Viable Product: What is the smallest program that works?
+Text Chunk 3- Rev A
+Pull out the minimum viable product from your brainstorming. What is the smallest result that would satisfy your goals? Is there a way to make things a bit smaller? I would size it so you can get working code to accomplish the goal in a few hours.
 
-Pull out the minimum viable product from your brainstorming. What is the smallest result that would satisfy your goals? Is there a way to make things a bit smaller? I would size it so that you can get working code to accomplish the goal written in a few hours.
+I chose to generate four guesses for Wordle. I also decided to generate my frequency table from the word list itself. I found a five-letter word list that I could download and read in, but all the letter frequency tables I found were on blogs or in articles, and the only way I could see to get them into my program was to type them in and I was too lazy to do that. I decided to implement the process I outlined in the brainstorming session and calculate four guesses.
 
 
-
-## 3. Write some bad code. 
+## 3. Write some bad code.
+Text Chunk 4- Rev A
 Write some code that does that thing. It will be ugly. If you can't figure something out, do it the wrong way. Just get something running.
+
+This first attempt took me 3-4 hours to write.
+
+I googled how to calculate the frequency of letters in words (in R) and found this helpful tutorial at https://www.r-bloggers.com/ by https://www.yihanwu.ca/.
+
+Here's the tutorial:  https://www.r-bloggers.com/2018/12/rrrrs-in-r-letter-frequency-in-r-package-names/  
 
 ### The Minimal Viable Product: Running Code
 
-I cleaned up the commenting/formatting of the initial code just for this post. I also added library(tidyverse)- apparantly I was just loading libraries through the gui back then. If you want to see the true initial, it is on GitHub at: 
+I cleaned up the commenting/formatting of the initial code just for this post. I also added library(tidyverse)- apparently, I was just loading libraries through the gui back then. If you want to see the true initial, it is on GitHub at: 
 
 Here's what my MVP does:
 1. I found a list of words from: https://www-cs-faculty.stanford.edu/~knuth/sgb-words.txt
 and imported it.
 
-2. I calculated how many times each letter occured over the word list. (This, or rather the scaled version, was the score assigned each letter.)
-3. I looped through the word list and calculated two scores for each word; one using all letters and one using only the unique letters.
-4. I picked the highest scoring word as my first guess.
-5.  I then went through the word list and calculated a second score for the words minus the letters already guess in the first guess (and ignoring duplicated letters)
-6.  I picked the highest scoring word as my second guess.
+2. I calculated how often each letter occurred over the word list starting with the tutorial:  https://www.r-bloggers.com/2018/12/rrrrs-in-r-letter-frequency-in-r-package-names/   
+(This, or the scaled version, was the score assigned to each letter.)
+
+3. I looped through the word list and calculated two scores for each word, one using all letters and one using only the unique letters. 
+
+4. I picked the highest-scoring word as my first guess.
+
+5. I then went through the word list and calculated a second score for the words minus the letters already guessed in the first guess (and ignoring duplicated letters).
+
+6. I picked the highest-scoring word as my second guess.
+
 7. I repeated steps 5 & 6 to pick a third guess.
 
-Okay, so let's look at some bad code.  I'm going to flag a few things as we go through, but I'm certain you can find a lot more that is not optimal.
+Okay, so let's look at some bad code. I will flag a few things as we go through, but I'm certain you can find much more that is not optimal.
 
+Here's loading the data and writing two scoring functions. I first wrote these in the code but had time to convert them to functions in this initial work session. It was an opportunity to practice function writing, but it was not critical to the minimum viable product.
 
-Here's loading the data and writing two scoring functions.  I have lots of print statements commented out; this is a very simple was to debug and see how you are proceding through the code.  There are more sophisicated tools in R Studio, but I didn't want to figure out how to use them at this moment.  I use the global variable char_frequencies for the value of each letter.  I create this variable in the next code chunk.
+I have lots of print statements commented out; this is a very simple way to debug and see how you are proceeding through the code. There are more sophisticated tools in R Studio, but I didn't want to figure out how to use them at this moment. I use the global variable char_frequencies for the value of each letter. I create this variable in the next code chunk.
 
 ```{r}
+#| label: loading-data-functions
+#| warning: false
 library(tidyverse)
 
 sgb.words <- 
@@ -263,7 +298,7 @@ Note that there is an error here too.  Despite the penalty for duplicate letters
 c = Scoring_Word_Unique("aroseuntildumpy")
 c
 ```
-But, the program works!  It generated three reasonable guesses for Wordle that use common letters.  Note that by my scoring rules, the manually chose set of words is a better choice.
+But, the program works!  It generated three reasonable guesses for Wordle that use common letters.  Note that by my scoring rules, the manually chosen set of words is a better choice.
 
 ## 4. Critique the code
 
