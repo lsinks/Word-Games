@@ -100,10 +100,26 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 </head>
 
-<body class="fullcontent">
+<body>
 
 <div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
-
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#self-guided-learning-the-ever-evolving-wordle-guess-generator" id="toc-self-guided-learning-the-ever-evolving-wordle-guess-generator" class="nav-link active" data-scroll-target="#self-guided-learning-the-ever-evolving-wordle-guess-generator">Self-Guided Learning: The Ever Evolving Wordle Guess Generator</a></li>
+  <li><a href="#brainstorming-the-project." id="toc-brainstorming-the-project." class="nav-link" data-scroll-target="#brainstorming-the-project.">1. Brainstorming the project.</a></li>
+  <li><a href="#minimum-viable-product-what-is-the-smallest-program-that-works" id="toc-minimum-viable-product-what-is-the-smallest-program-that-works" class="nav-link" data-scroll-target="#minimum-viable-product-what-is-the-smallest-program-that-works">2. Minimum Viable Product: What is the smallest program that works?</a></li>
+  <li><a href="#write-some-bad-code." id="toc-write-some-bad-code." class="nav-link" data-scroll-target="#write-some-bad-code.">3. Write some bad code.</a>
+  <ul class="collapse">
+  <li><a href="#the-minimal-viable-product-running-code" id="toc-the-minimal-viable-product-running-code" class="nav-link" data-scroll-target="#the-minimal-viable-product-running-code">The Minimal Viable Product: Running Code</a></li>
+  </ul></li>
+  <li><a href="#critique-the-code" id="toc-critique-the-code" class="nav-link" data-scroll-target="#critique-the-code">4. Critique the code</a></li>
+  <li><a href="#current-status" id="toc-current-status" class="nav-link" data-scroll-target="#current-status">5. Current Status</a></li>
+  </ul>
+</nav>
+</div>
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
@@ -276,10 +292,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co">#num_words &lt;- 5</span></span>
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>small_list <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="at">word_name =</span> sgb.words[<span class="dv">1</span><span class="sc">:</span>num_words,<span class="dv">1</span>], </span>
 <span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>                    <span class="at">score =</span><span class="fu">rep</span>(<span class="dv">0</span>, <span class="at">times =</span> num_words), </span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>                    <span class="at">unique_score =</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="at">times=</span>num_words),</span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>                    <span class="at">post_word_one_unique =</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="at">times=</span>num_words),</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>                    <span class="at">post_word_two_unique =</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="at">times=</span>num_words),</span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>                    <span class="at">post_word_three_unique =</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="at">times=</span>num_words)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>                    <span class="at">unique_score =</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="at">times =</span> num_words),</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>                    <span class="at">post_word_one_unique =</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="at">times =</span> num_words),</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>                    <span class="at">post_word_two_unique =</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="at">times =</span> num_words),</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>                    <span class="at">post_word_three_unique =</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="at">times =</span> num_words)</span>
 <span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>                                                )</span>
 <span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>word <span class="ot">&lt;-</span> small_list[[<span class="dv">1</span>,<span class="dv">1</span>]]</span>
 <span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="fu">Scoring_Word</span>(word)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
