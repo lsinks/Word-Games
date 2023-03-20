@@ -125,41 +125,59 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <section id="self-guided-learning-the-ever-evolving-wordle-guess-generator" class="level2">
 <h2 class="anchored" data-anchor-id="self-guided-learning-the-ever-evolving-wordle-guess-generator">Self-Guided Learning: The Ever Evolving Wordle Guess Generator</h2>
-<p>I’m going to show you how I used a portfolio project to create my own learning plan. I honestly did a bunch of this work in a paper notebook. I hadn’t learned git at that point and I also find brainstorming with pen and paper more productive than doing it on the computer. I’m a scientist by training, so set this up like I would any experiment- with a fully proper lab notebook.</p>
-<p>My learning project was a Wordle Guess Generator. Motivated partly by my desire to have good guesses for Septle (a seven letter guessing game), this project has been a key part of my journey to learn R. The code as gone through several major overhauls as I’ve needed to learn new things and used this project as the test bed. And here it is again, as vehicle to learn quarto/ markdown. I’m going to show you the very first ugly code and then how I critiqued and revised it over the course of several months.</p>
+<p>Text Chunk 1 - rev a</p>
+<p>I will show you how I used a portfolio project to create a self-guided learning plan. My learning project was a Wordle Guess Generator. Motivated partly by my desire to have good guesses for Septle (a seven-letter guessing game), this project has been a crucial part of my journey to learn R. Practicing and learning coding skills were more important to me than devising the optimal strategy; if you are interested in “the best” Wordle strategy, then you will probably find much better answers by Googling.</p>
+<p>For those who don’t know, Wordle is a word-guessing gamer that gives you five guesses to identify a 5-letter word. Correct letters are shown in green or yellow with each guess, depending on whether they are appropriately placed or not. Incorrect letters are shown in gray.</p>
+<p>I wasn’t interested in coming up with the global “best” answer. I wanted to come up with some guesses that fit my gameplay style. I guess three words in a row without trying to solve the game. Then, with a fair number of letters known, I attempt to solve the word.</p>
+<p>The code has undergone several significant overhauls as I’ve needed to learn new things and used this project as the test bed. And here it is again, as a vehicle to learn quarto/ markdown. Here I will show you the very first ugly code and how I critiqued and revised it over several months.</p>
 </section>
 <section id="brainstorming-the-project." class="level2">
 <h2 class="anchored" data-anchor-id="brainstorming-the-project.">1. Brainstorming the project.</h2>
-<p>Brainstorm what you want this project to do. Try to have a very clear statement about what the goal of the project is at the top. If you can think of self-contained modules, mark that. If you can sketch out the scaffold of the code- great! If you have some ideas about what the results will be, even better. Put everything you can think of down.</p>
+<p>Text Chunk 2- Rev A Brainstorm what you want this project to do. Try to have a very clear statement about the project’s goal at the top. If you can think of self-contained modules, mark that. If you can sketch out the scaffold of the code- great! If you have some ideas about the results, even better. Put everything you can think of down. I had been thinking about this project for a while, so this brainstorming sheet is neat. Neatness and organization are not important at this point; getting stuff written down is.</p>
+<p>My goal was “I want 3 initial guesses for Septle. Ideally, I’ll maximize the number of unique letters, and I want to preferentially pick from the most frequently used letters.”</p>
+<p>I decided my scoring would be based on the frequency letters occur in English; more common letters get a higher score than uncommon letters. To generate the score for the word, I proposed the following process:</p>
+<ol type="1">
+<li>Read in letter frequencies</li>
+<li>Scoring [the letters, originally I thought it would be based on rank, with the most common letter getting a 26 and the least common getting a 1. That is what the confusing little sketch is attempting to convey. A is not the most common letter, nor is Z the least common.]</li>
+<li>Read in the list of words</li>
+<li>Calculate the scores [of the words]</li>
+<li>Pick the best word as a first guess [best meaning highest scoring]</li>
+</ol>
+<p>I also talk about how the frequency distribution of letters will likely differ between five and seven-letter words. I suggested looking at the frequency of letters in modern text instead of just frequency lists from linguists. I noted that certain letters are more likely to be in a specific position, and it could be valuable to constrain the guess to typical positions. An example is that “y” is almost always at the end of a word in English, so “sadly” might be a better guess than “yacht” for that reason. You are likelier to lock down a letter with a positionally accurate guess. I also said that I wanted a 4th Wordle guess. There are a lot of ideas here! That’s okay because I winnow them down in the next step.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="images/brainstorming_both.jpg" class="img-fluid figure-img" alt="Two handwritten pages entitled &quot;Programming Project 1&quot;"></p>
 <p></p><figcaption class="figure-caption">The initial brainstorming session</figcaption><p></p>
 </figure>
 </div>
-<p>“I want 3 intiial gueses for septle. Ideally, I’ll maximize the number of unique letters and I want to preferentially pick from the most frquently used letters.</p>
 </section>
 <section id="minimum-viable-product-what-is-the-smallest-program-that-works" class="level2">
 <h2 class="anchored" data-anchor-id="minimum-viable-product-what-is-the-smallest-program-that-works">2. Minimum Viable Product: What is the smallest program that works?</h2>
-<p>Pull out the minimum viable product from your brainstorming. What is the smallest result that would satisfy your goals? Is there a way to make things a bit smaller? I would size it so that you can get working code to accomplish the goal written in a few hours.</p>
+<p>Text Chunk 3- Rev A Pull out the minimum viable product from your brainstorming. What is the smallest result that would satisfy your goals? Is there a way to make things a bit smaller? I would size it so you can get working code to accomplish the goal in a few hours.</p>
+<p>I chose to generate four guesses for Wordle. I also decided to generate my frequency table from the word list itself. I found a five-letter word list that I could download and read in, but all the letter frequency tables I found were on blogs or in articles, and the only way I could see to get them into my program was to type them in and I was too lazy to do that. I decided to implement the process I outlined in the brainstorming session and calculate four guesses.</p>
 </section>
 <section id="write-some-bad-code." class="level2">
 <h2 class="anchored" data-anchor-id="write-some-bad-code.">3. Write some bad code.</h2>
-<p>Write some code that does that thing. It will be ugly. If you can’t figure something out, do it the wrong way. Just get something running.</p>
+<p>Text Chunk 4- Rev A Write some code that does that thing. It will be ugly. If you can’t figure something out, do it the wrong way. Just get something running.</p>
+<p>This first attempt took me 3-4 hours to write.</p>
+<p>I googled how to calculate the frequency of letters in words (in R) and found this helpful tutorial at https://www.r-bloggers.com/ by https://www.yihanwu.ca/.</p>
+<p>Here’s the tutorial: https://www.r-bloggers.com/2018/12/rrrrs-in-r-letter-frequency-in-r-package-names/</p>
 <section id="the-minimal-viable-product-running-code" class="level3">
 <h3 class="anchored" data-anchor-id="the-minimal-viable-product-running-code">The Minimal Viable Product: Running Code</h3>
-<p>I cleaned up the commenting/formatting of the initial code just for this post. I also added library(tidyverse)- apparantly I was just loading libraries through the gui back then. If you want to see the true initial, it is on GitHub at:</p>
+<p>I cleaned up the commenting/formatting of the initial code just for this post. I also added library(tidyverse)- apparently, I was just loading libraries through the gui back then. If you want to see the true initial, it is on GitHub at:</p>
 <p>Here’s what my MVP does: 1. I found a list of words from: https://www-cs-faculty.stanford.edu/~knuth/sgb-words.txt and imported it.</p>
 <ol start="2" type="1">
-<li>I calculated how many times each letter occured over the word list. (This, or rather the scaled version, was the score assigned each letter.)</li>
-<li>I looped through the word list and calculated two scores for each word; one using all letters and one using only the unique letters.</li>
-<li>I picked the highest scoring word as my first guess.</li>
-<li>I then went through the word list and calculated a second score for the words minus the letters already guess in the first guess (and ignoring duplicated letters)</li>
-<li>I picked the highest scoring word as my second guess.</li>
-<li>I repeated steps 5 &amp; 6 to pick a third guess.</li>
+<li><p>I calculated how often each letter occurred over the word list starting with the tutorial: https://www.r-bloggers.com/2018/12/rrrrs-in-r-letter-frequency-in-r-package-names/<br>
+(This, or the scaled version, was the score assigned to each letter.)</p></li>
+<li><p>I looped through the word list and calculated two scores for each word, one using all letters and one using only the unique letters.</p></li>
+<li><p>I picked the highest-scoring word as my first guess.</p></li>
+<li><p>I then went through the word list and calculated a second score for the words minus the letters already guessed in the first guess (and ignoring duplicated letters).</p></li>
+<li><p>I picked the highest-scoring word as my second guess.</p></li>
+<li><p>I repeated steps 5 &amp; 6 to pick a third guess.</p></li>
 </ol>
-<p>Okay, so let’s look at some bad code. I’m going to flag a few things as we go through, but I’m certain you can find a lot more that is not optimal.</p>
-<p>Here’s loading the data and writing two scoring functions. I have lots of print statements commented out; this is a very simple was to debug and see how you are proceding through the code. There are more sophisicated tools in R Studio, but I didn’t want to figure out how to use them at this moment. I use the global variable char_frequencies for the value of each letter. I create this variable in the next code chunk.</p>
+<p>Okay, so let’s look at some bad code. I will flag a few things as we go through, but I’m certain you can find much more that is not optimal.</p>
+<p>Here’s loading the data and writing two scoring functions. I first wrote these in the code but had time to convert them to functions in this initial work session. It was an opportunity to practice function writing, but it was not critical to the minimum viable product.</p>
+<p>I have lots of print statements commented out; this is a very simple way to debug and see how you are proceeding through the code. There are more sophisticated tools in R Studio, but I didn’t want to figure out how to use them at this moment. I use the global variable char_frequencies for the value of each letter. I create this variable in the next code chunk.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
@@ -388,7 +406,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code>[1] 7.654468</code></pre>
 </div>
 </div>
-<p>But, the program works! It generated three reasonable guesses for Wordle that use common letters. Note that by my scoring rules, the manually chose set of words is a better choice.</p>
+<p>But, the program works! It generated three reasonable guesses for Wordle that use common letters. Note that by my scoring rules, the manually chosen set of words is a better choice.</p>
 </section>
 </section>
 <section id="critique-the-code" class="level2">
