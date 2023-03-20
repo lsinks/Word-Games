@@ -138,6 +138,7 @@ Scoring_Word_Unique <- function(word){
 }
 
 ```
+Text Chunk 4- Rev A
 
 Here I start a timer to get an idea how long the code took.  I also calculate how often each letter appears in the list and create the normalized version.  I create two incredibley ugly graphs: one of the raw counts for each letter and one of the scaled frequencies.  But I did figure out how to create the graphs in a sorted order.  This is also a moment to do a quick reality check on the results- are the most and least common letters what you'd expect?
 
