@@ -295,35 +295,52 @@ top_words2 <- small_df3 %>%
 word_3 <- top_words2$word_name[1]
 
 ```
-
-Lastly, I calculated the total score of these 3 words, compared to the words I was currently guessing.  
-
+Text Chunk 9 rev A
+Lastly, I calculated the total score of these three words compared to my hand-picked words.
 ```{r}
-a = Scoring_Word_Unique("arose") + Scoring_Word_Unique("until") + Scoring_Word_Unique("dumpy")
+#| label: total-score-guesses
+a = Scoring_Word_Unique("arose") + 
+  Scoring_Word_Unique("until") + 
+  Scoring_Word_Unique("dumpy")
 a
-b = Scoring_Word_Unique("crone") + Scoring_Word_Unique("mighty") + Scoring_Word_Unique("sadly")
+b = Scoring_Word_Unique("crone") +
+  Scoring_Word_Unique("mighty") +
+  Scoring_Word_Unique("sadly")
 b
 ```
-Note that there is an error here too.  Despite the penalty for duplicate letters, "u" appears in two words.  The correct scoring call should have been :
+text chunk 10 rev a
+
+Note that there is an error here too. Despite the penalty for duplicate letters, "u" appears in two words. The correct scoring call should have been:
 ```{r}
+#| label: corrected-score-guesses
+
 c = Scoring_Word_Unique("aroseuntildumpy")
 c
 ```
-But, the program works!  It generated three reasonable guesses for Wordle that use common letters.  Note that by my scoring rules, the manually chosen set of words is a better choice.
+text chunk 11 rev a
+
+But the program works! It generated three reasonable guesses for Wordle that use common letters. Note that by my scoring rules, the manually chosen set of words is a better choice.
 
 ## 4. Critique the code
+text chunk 12 rev a
 
-After this first attempt, I came up with a list of tasks.
+This step is the critical step to accelerate your learning. You need to review your code and list everything you know is not done properly and everything confusing you. This should be done at the end of every session or at the start of the next. Be honest with yourself. If you don't understand something, put it on your list, even if your code works. The point of this exercise is to increase your coding proficiency.
 
-1.Save current code as frequency_072222 and work on a new copy.  This was functional code last night so I want to keep it.
+This is my list from that code we just reviewed. I created this the next day before I started work. Note my versioning by file name.
+
+1. Save current code as frequency_072222 and work on a new copy. This was functional code last night, so I want to keep it.
 2. Import is wrong because it takes the first word as a header.
-3. I need more concise varaible names.  Also, I create a bunch of temp variables that aren't needed.
-4. I manually subtract out (hard coded) words picked in previous cycles.  I need that done on the fly.
-Once 4 is done, I'd like to write a function that will generate however many guesses you ask for.
+3. I need more concise variable names. Also, I create a bunch of temp variables that aren't needed.
+4. I manually subtract out (hard-coded) words picked in previous cycles. I need that done on the fly.
+5. Once 4 is done, I'd like to write a function to generate however many guesses you ask for.
 6. I'd like to look at the histogram of the scores as you cycle through the guesses.
-7. I'm very unclear on when I need lists, dataframes, tibbles, etc. for the different functions.
-8. Give credit to the website when I took the string split code from.
-9. Some functions from the other code are out of date, so I should update.
-10. Update scoring word to have flexible word length.
+7. I'm very unclear on when I need lists, dataframes, tibbles, etc., for the different functions.
+8. Give credit to the website where I took the string split code from.
+9. Some functions from the other code are out of date, so I should update them. [I got warnings in R Studio about this, which I didn't understand.]
+10. Update scoring_word to have flexible word length.
 
 Again, there is a lot more wrong with this code, but this is the list of things I could identify with the knowledge I had at the time.
+
+The next day, I created a chart of all my variables, their sizes, and their types. I also proposed new, clearer names for them, though this wasn't implemented until a few days later. I mostly played around with how long it took to calculate the initial score and unique score using separate or combined loops. I used sys.time() to benchmark, which didn't seem terribly consistent in its output. However, there didn't seem to be a huge difference between the methods, so I returned it to two loops for clarity. At the end of this day, I had four items on my task list after critiquing and reviewing.   The last one was, "I need to figure out git_hub or come up with a better way of versioning than the date."
+
+Proving that point, I put the wrong date in all the file names the next time I worked on the code. In that session, I devoted most of the time to figuring out item 4 on my task list. I wrote a function called remove_letters, which could be used instead of hard coding. I also played around with reshaping the data using pivot_longer from tidyr. I created a histogram of word scores as letters are removed from consideration, which required the reshaped data. Reshaping data can be tricky, so this was a good opportunity to work through that process. (Again, versioning by name, this was called "frequency_072422_tidyr", in case I really messed up.)
