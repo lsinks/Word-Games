@@ -138,11 +138,14 @@ Scoring_Word_Unique <- function(word){
 }
 
 ```
-Text Chunk 4- Rev A
+Text Chunk 5- Rev A
 
-Here I start a timer to get an idea how long the code took.  I also calculate how often each letter appears in the list and create the normalized version.  I create two incredibley ugly graphs: one of the raw counts for each letter and one of the scaled frequencies.  But I did figure out how to create the graphs in a sorted order.  This is also a moment to do a quick reality check on the results- are the most and least common letters what you'd expect?
+I did run through most of the code with five words initially, and then later the whole word list, when I was more confident that things worked.
+
+I calculate how often each letter appears in the list and create the scaled version.  I created two incredibly ugly graphs: one of the raw counts for each letter and one of the scaled frequencies.  But I did figure out how to create the graphs in sorted order.  This is also a moment to do a quick reality check on the results- are the most and least common letters what you'd expect?
 
 ```{r}
+#| label: letter_frequency-calc-graphs
 start_time <- Sys.time()
 
 letters <- unlist(strsplit(sgb.words[,1], split = ""))
@@ -164,15 +167,18 @@ ggplot(char_frequencies,
   theme_classic()
 ```
 
-Now I calculate the scores for the words that I've been currently playing with.  I also hand calculated these scores using the values from char_frequencies to make sure my scoring functions were doing what I thought they were.
+Text Chunk 6- Rev A
 
-I inistalized an object to store the words, scores, and guesses.  You can also tell that I had no idea what data types my objects are, since I called it a list.  It is actually a matrix/array of characters and none of my zeros are actually numbers.  I really want a dataframe, but I didn't really know how to do that.
+Now I calculate the scores for the (hand-picked) words I've been playing with.  I also hand-calculated these scores using the values from char_frequencies to ensure my scoring functions did what I thought they were.
 
-This chunk also pulls out a single word and sends it to score, just to check that works before I loop through the entire object and calculate all the scores.
+I initialized an object to store the words, scores, and guesses.  You can also tell that I had no idea what data types my objects were since I called them a list.  small_list is a matrix/array of characters, and none of my zeros are numbers.  I wanted a dataframe, but I didn't know how to do that.
 
-You can also see I hard coded in the number of words.
+This chunk also pulls out a single word and sends it to score to check that it works before I loop through the entire object and calculate all the scores.
+
+You can also see I hard-coded the number of words (again... I did this in the prior code chunk too.)
 
 ```{r}
+#| label: initial-scoring-words
 #calculate the score for crone
 crone_score <- Scoring_Word("crone")
 #might_score <- Scoring_Word ("might")
@@ -200,9 +206,6 @@ for (ind2 in 1:num_words){
 #u_there_core <- Scoring_Word_Unique ("there")
 #sadly_score <- Scoring_Word ("sadly")
 
-
-
-
 ind2 <- 0
 for (ind2 in 1:num_words){
  # print(small_list[[ind2,1]])
@@ -211,9 +214,12 @@ for (ind2 in 1:num_words){
   small_list[[ind2,3]] <- score_ind2
 }
 ```
-Figured out how to make this into a dataframe.  Note that all my numbers are still characters.  It is kind of funny that things worked even though they were the wrond type.
+Text Chunk 7- Rev A
+
+In my attempt to sort the word scores and pick out the highest-scoring works, I created an unnecessary number of temporary variables. I forced one of these objects to be a dataframe, but I didn't check the types of the individual components. Note that all my numbers are still characters. It is funny that things worked even though they were the wrong type.  
 
 ```{r}
+#| label: to-df-first-guess-chosen
 small_list1 <- small_list
 small_df<- as.data.frame(small_list1)
 top_words <- small_df %>%
@@ -221,10 +227,14 @@ top_words <- small_df %>%
 
 word_1 <- top_words$word_name[1]
 ```
+Text Chunk 8- Rev A
 
-Now I calculate the second and third guesses.  I wanted to penalize duplicate letters, so I used the unique letter scoring function, and I removed the letters from the first guess.  Couldn't figure out how to do that automatically, so I hard coded in to remove the letters "a", "r", "o", "s", and "e" from the words before I sent them to be scored.  Loop through the list again, and repeat for the last guess.  Again, hard coded in the letters to remove from the first and second guesses.
+Now I calculate the second and third guesses. I wanted to penalize duplicate letters, so I used the unique letter scoring function and removed the letters from the first guess. I couldn't figure out how to do that automatically, so I hardcoded to remove the letters "a", "r", "o", "s", and "e" from the words before I sent them to be scored. This is precisely the kind of situation where you can get bogged down doing things "properly" and end up stuck. I quickly attempted to figure it out and then did it incorrectly. You can also see that I have a bunch of stuff commented out that didn't work and a bunch of print statements for debugging. This is not pretty code. 
 
-```{r}
+Then I loop through the list again and repeat for the last guess. Again, hardcoded in the letters to remove from the first and second guesses.
+
+```{r} 
+#| label: finding-second-third-guess
 #now we need a function that sees if a word has the letters of the word_1
 #and removes them and then calculates the word score
 #top word is arose
@@ -285,8 +295,8 @@ top_words2 <- small_df3 %>%
 word_3 <- top_words2$word_name[1]
 
 ```
-Lastly, I calculated the total score of these 3 words, compared to the words I was currently guessing.  
 
+Lastly, I calculated the total score of these 3 words, compared to the words I was currently guessing.  
 
 ```{r}
 a = Scoring_Word_Unique("arose") + Scoring_Word_Unique("until") + Scoring_Word_Unique("dumpy")

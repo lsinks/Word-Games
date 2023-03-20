@@ -233,8 +233,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>  }</span>
 <span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Text Chunk 4- Rev A</p>
-<p>Here I start a timer to get an idea how long the code took. I also calculate how often each letter appears in the list and create the normalized version. I create two incredibley ugly graphs: one of the raw counts for each letter and one of the scaled frequencies. But I did figure out how to create the graphs in a sorted order. This is also a moment to do a quick reality check on the results- are the most and least common letters what you’d expect?</p>
+<p>Text Chunk 5- Rev A</p>
+<p>I did run through most of the code with five words initially, and then later the whole word list, when I was more confident that things worked.</p>
+<p>I calculate how often each letter appears in the list and create the scaled version. I created two incredibly ugly graphs: one of the raw counts for each letter and one of the scaled frequencies. But I did figure out how to create the graphs in sorted order. This is also a moment to do a quick reality check on the results- are the most and least common letters what you’d expect?</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>start_time <span class="ot">&lt;-</span> <span class="fu">Sys.time</span>()</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -248,7 +249,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_col</span>() <span class="sc">+</span></span>
 <span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>   <span class="fu">theme_classic</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="Wordle_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="672"></p>
+<p><img src="Wordle_files/figure-html/letter_frequency-calc-graphs-1.png" class="img-fluid" width="672"></p>
 </div>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>common <span class="ot">&lt;-</span> <span class="fu">max</span>(char_frequencies[,<span class="dv">2</span>])</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">=</span> (char_frequencies[,<span class="dv">2</span>]<span class="sc">/</span>common)</span>
@@ -258,13 +259,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>()<span class="sc">+</span></span>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="Wordle_files/figure-html/unnamed-chunk-2-2.png" class="img-fluid" width="672"></p>
+<p><img src="Wordle_files/figure-html/letter_frequency-calc-graphs-2.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>Now I calculate the scores for the words that I’ve been currently playing with. I also hand calculated these scores using the values from char_frequencies to make sure my scoring functions were doing what I thought they were.</p>
-<p>I inistalized an object to store the words, scores, and guesses. You can also tell that I had no idea what data types my objects are, since I called it a list. It is actually a matrix/array of characters and none of my zeros are actually numbers. I really want a dataframe, but I didn’t really know how to do that.</p>
-<p>This chunk also pulls out a single word and sends it to score, just to check that works before I loop through the entire object and calculate all the scores.</p>
-<p>You can also see I hard coded in the number of words.</p>
+<p>Text Chunk 6- Rev A</p>
+<p>Now I calculate the scores for the (hand-picked) words I’ve been playing with. I also hand-calculated these scores using the values from char_frequencies to ensure my scoring functions did what I thought they were.</p>
+<p>I initialized an object to store the words, scores, and guesses. You can also tell that I had no idea what data types my objects were since I called them a list. small_list is a matrix/array of characters, and none of my zeros are numbers. I wanted a dataframe, but I didn’t know how to do that.</p>
+<p>This chunk also pulls out a single word and sends it to score to check that it works before I loop through the entire object and calculate all the scores.</p>
+<p>You can also see I hard-coded the number of words (again… I did this in the prior code chunk too.)</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#calculate the score for crone</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>crone_score <span class="ot">&lt;-</span> <span class="fu">Scoring_Word</span>(<span class="st">"crone"</span>)</span>
@@ -296,18 +298,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co">#u_there_core &lt;- Scoring_Word_Unique ("there")</span></span>
 <span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="co">#sadly_score &lt;- Scoring_Word ("sadly")</span></span>
 <span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>ind2 <span class="ot">&lt;-</span> <span class="dv">0</span></span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (ind2 <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>num_words){</span>
-<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a> <span class="co"># print(small_list[[ind2,1]])</span></span>
-<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>  score_ind2 <span class="ot">&lt;-</span> <span class="fu">Scoring_Word_Unique</span>(small_list[[ind2,<span class="dv">1</span>]])</span>
-<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a> <span class="co"># print(score_ind2)</span></span>
-<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>  small_list[[ind2,<span class="dv">3</span>]] <span class="ot">&lt;-</span> score_ind2</span>
-<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>ind2 <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (ind2 <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>num_words){</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a> <span class="co"># print(small_list[[ind2,1]])</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>  score_ind2 <span class="ot">&lt;-</span> <span class="fu">Scoring_Word_Unique</span>(small_list[[ind2,<span class="dv">1</span>]])</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a> <span class="co"># print(score_ind2)</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>  small_list[[ind2,<span class="dv">3</span>]] <span class="ot">&lt;-</span> score_ind2</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Figured out how to make this into a dataframe. Note that all my numbers are still characters. It is kind of funny that things worked even though they were the wrond type.</p>
+<p>Text Chunk 7- Rev A</p>
+<p>In my attempt to sort the word scores and pick out the highest-scoring works, I created an unnecessary number of temporary variables. I forced one of these objects to be a dataframe, but I didn’t check the types of the individual components. Note that all my numbers are still characters. It is funny that things worked even though they were the wrong type.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>small_list1 <span class="ot">&lt;-</span> small_list</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>small_df<span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(small_list1)</span>
@@ -316,7 +316,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>word_1 <span class="ot">&lt;-</span> top_words<span class="sc">$</span>word_name[<span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Now I calculate the second and third guesses. I wanted to penalize duplicate letters, so I used the unique letter scoring function, and I removed the letters from the first guess. Couldn’t figure out how to do that automatically, so I hard coded in to remove the letters “a”, “r”, “o”, “s”, and “e” from the words before I sent them to be scored. Loop through the list again, and repeat for the last guess. Again, hard coded in the letters to remove from the first and second guesses.</p>
+<p>Text Chunk 8- Rev A</p>
+<p>Now I calculate the second and third guesses. I wanted to penalize duplicate letters, so I used the unique letter scoring function and removed the letters from the first guess. I couldn’t figure out how to do that automatically, so I hardcoded to remove the letters “a”, “r”, “o”, “s”, and “e” from the words before I sent them to be scored. This is precisely the kind of situation where you can get bogged down doing things “properly” and end up stuck. I quickly attempted to figure it out and then did it incorrectly. You can also see that I have a bunch of stuff commented out that didn’t work and a bunch of print statements for debugging. This is not pretty code.</p>
+<p>Then I loop through the list again and repeat for the last guess. Again, hardcoded in the letters to remove from the first and second guesses.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">#now we need a function that sees if a word has the letters of the word_1</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co">#and removes them and then calculates the word score</span></span>
