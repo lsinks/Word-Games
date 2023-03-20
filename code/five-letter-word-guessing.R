@@ -1,6 +1,6 @@
 # Loading libraries and data ----
 library("tidyverse")
-library("assertive")
+#library("assertive")
 
 
 #from https://www-cs-faculty.stanford.edu/~knuth/sgb-words.txt

@@ -88,7 +88,7 @@ Removing_Letters <- function (word, chosen_word, verbose = TRUE, debug_detail = 
 
 ```{r}
 # Loading libraries and data ----
-#library("tidyverse")
+library("tidyverse")
 library("assertive")
 
 
